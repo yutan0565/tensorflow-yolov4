@@ -69,7 +69,11 @@ def YOLOv3(input_layer, NUM_CLASS):
     return [conv_sbbox, conv_mbbox, conv_lbbox]
 
 def YOLOv4(input_layer, NUM_CLASS):
+
+    # darknet에서  마지막 3개 layer 부분꺼 가져오기
     route_1, route_2, conv = backbone.cspdarknet53(input_layer)
+
+
 
     route = conv
     conv = common.convolutional(conv, (1, 1, 512, 256))
