@@ -14,7 +14,7 @@ from core.config import cfg
 # XYSCALE = cfg.YOLO.XYSCALE
 # ANCHORS = utils.get_anchors(cfg.YOLO.ANCHORS)
 
-def YOLO(input_layer, NUM_CLASS, model='yolov4', is_tiny=False):
+def YOLO(input_layer, NUM_CLASS, model='yolov3', is_tiny=False):
     if is_tiny:
         if model == 'yolov4':
             return YOLOv4_tiny(input_layer, NUM_CLASS)
@@ -29,6 +29,7 @@ def YOLO(input_layer, NUM_CLASS, model='yolov4', is_tiny=False):
 def YOLOv3(input_layer, NUM_CLASS):
     route_1, route_2, conv = backbone.darknet53(input_layer)
 
+    ## 13
     conv = common.convolutional(conv, (1, 1, 1024, 512))
     conv = common.convolutional(conv, (3, 3, 512, 1024))
     conv = common.convolutional(conv, (1, 1, 1024, 512))
