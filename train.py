@@ -78,6 +78,10 @@ def main(_argv):
 
     # define training step function
     # @tf.function
+
+
+    # 여기서 변수로 등장하는 target은 어디서 나온거지 ??
+
     def train_step(image_data, target):
         with tf.GradientTape() as tape:
             pred_result = model(image_data, training=True)
@@ -88,7 +92,7 @@ def main(_argv):
                 conv, pred = pred_result[i * 2], pred_result[i * 2 + 1]
                 loss_items = compute_loss(pred, conv, target[i][0], target[i][1], STRIDES=STRIDES, NUM_CLASS=NUM_CLASS, IOU_LOSS_THRESH=IOU_LOSS_THRESH, i=i)
                 giou_loss += loss_items[0]
-                conf_loss += loss_items[1]
+                conf_loss += loss_items[1] # confidence score 관련된 파트
                 prob_loss += loss_items[2]
 
             total_loss = giou_loss + conf_loss + prob_loss
@@ -117,6 +121,8 @@ def main(_argv):
                 tf.summary.scalar("loss/conf_loss", conf_loss, step=global_steps)
                 tf.summary.scalar("loss/prob_loss", prob_loss, step=global_steps)
             writer.flush()
+
+
     def test_step(image_data, target):
         with tf.GradientTape() as tape:
             pred_result = model(image_data, training=True)

@@ -322,6 +322,7 @@ def filter_boxes(box_xywh, scores, score_threshold=0.4, input_shape = tf.constan
     return (boxes, pred_conf)
 
 
+# 여기가 박스에서 나온 결과 연산하는 부분
 def compute_loss(pred, conv, label, bboxes, STRIDES, NUM_CLASS, IOU_LOSS_THRESH, i=0):
     conv_shape  = tf.shape(conv)
     batch_size  = conv_shape[0]
@@ -332,12 +333,13 @@ def compute_loss(pred, conv, label, bboxes, STRIDES, NUM_CLASS, IOU_LOSS_THRESH,
     conv_raw_conf = conv[:, :, :, :, 4:5]
     conv_raw_prob = conv[:, :, :, :, 5:]
 
-    pred_xywh     = pred[:, :, :, :, 0:4]
-    pred_conf     = pred[:, :, :, :, 4:5]
+    pred_xywh     = pred[:, :, :, :, 0:4]   #여기에는 bounding box의 정보가 들어가 있음
+    pred_conf     = pred[:, :, :, :, 4:5]   #5번째에 들어가 있는게 confidence score
 
+    # emdfhrehls label이 있는 부분 (Ground truth)
     label_xywh    = label[:, :, :, :, 0:4]
     respond_bbox  = label[:, :, :, :, 4:5]
-    label_prob    = label[:, :, :, :, 5:]
+    label_prob    = label[:, :, :, :, 5:]  #class별 확률이 들어가 있는 부분
 
     giou = tf.expand_dims(utils.bbox_giou(pred_xywh, label_xywh), axis=-1)
     input_size = tf.cast(input_size, tf.float32)
