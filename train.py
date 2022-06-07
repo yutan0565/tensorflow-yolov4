@@ -111,7 +111,6 @@ def main(_argv):
                 lr = cfg.TRAIN.LR_END + 0.5 * (cfg.TRAIN.LR_INIT - cfg.TRAIN.LR_END) * (
                     (1 + tf.cos((global_steps - warmup_steps) / (total_steps - warmup_steps) * np.pi))
                 )
-            optimizer.lr.assign(lr.numpy())
 
             # writing summary data
             with writer.as_default():
